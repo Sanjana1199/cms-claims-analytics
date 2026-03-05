@@ -1,0 +1,35 @@
+version: 2                                                                  
+                                                                                
+models:                                                                       
+    - name: fct_provider_claims
+      description: "Fact table of Medicare provider claims with payment
+  analytics"
+      columns:
+        - name: provider_npi
+          tests:
+            - not_null
+        - name: hcpcs_code
+          tests:
+            - not_null
+        - name: avg_medicare_payment
+          tests:
+            - not_null
+
+    - name: dim_providers
+      description: "Dimension table of unique Medicare providers"
+      columns:
+        - name: provider_npi
+          tests:
+            - unique
+            - not_null
+        - name: provider_state
+          tests:
+            - not_null
+
+    - name: dim_procedures
+      description: "Dimension table of unique procedure codes"
+      columns:
+        - name: hcpcs_code
+          tests:
+            - unique
+            - not_null

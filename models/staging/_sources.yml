@@ -1,0 +1,24 @@
+# _sources.yml
+# This file tells dbt where the raw data lives in Snowflake.
+# Think of it as a "map" that says:
+#   "Hey dbt, here are the raw tables we're going to read from."
+#
+# Why not just hardcode table names in SQL?
+#   - Sources create lineage (dbt tracks what depends on what)
+#   - You can add freshness checks (alert if data hasn't been updated)
+#   - Single place to change if the raw table name or schema changes
+
+version: 2
+
+sources:
+  - name: raw
+    database: CMS_ANALYTICS
+    schema: raw
+    description: "Raw CMS Medicare public data loaded from CSV files"
+
+    tables:
+      - name: physician_utilization
+        description: "Medicare Provider Utilization & Payment Data — one row per provider per service (HCPCS code)"
+
+      - name: inpatient_hospitals
+        description: "Medicare Inpatient Hospitals — one row per hospital per DRG (diagnosis group)"

@@ -1,0 +1,34 @@
+# dbt_project.yml
+# This is the main configuration file for your dbt project.
+# Think of it as the "settings" file that tells dbt:
+#   - What's this project called?
+#   - Where are the models?
+#   - How should each layer be materialized (table vs view)?
+
+name: 'cms_claims_analytics'
+version: '1.0.0'
+
+# This tells dbt which Snowflake profile to use for connection
+# The actual credentials live in ~/.dbt/profiles.yml (never in the project)
+profile: 'cms_claims_analytics'
+
+# Where dbt should look for different types of files
+model-paths: ["models"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+
+# How to materialize models in each layer
+# "view" = a saved SQL query (no data stored, runs on the fly)
+# "table" = actual table with data stored (faster to query, takes storage)
+models:
+  cms_claims_analytics:
+    staging:
+      +materialized: view        # Staging as views — lightweight, always fresh
+      +schema: staging
+    intermediate:
+      +materialized: table       # Intermediate as tables — joins are expensive
+      +schema: intermediate
+    marts:
+      +materialized: table       # Marts as tables — these get queried by dashboards
+      +schema: marts
