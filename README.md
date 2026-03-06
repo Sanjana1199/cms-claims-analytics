@@ -53,7 +53,7 @@ Snowflake Cloud Data Warehouse
 │   retry logic, and run monitoring via web UI         │
 └─────────────────────────────────────────────────────┘
         ↓
-Power BI Dashboard (provider payment variance, claims trends)
+Tableau Dashboard (payment variance, claims volume, geographic spending)
 ```
 
 ## Data Schema
@@ -137,6 +137,18 @@ dbt_run → dbt_test → log_success
 
 ![Airflow DAG Graph](DAG_Graph.png)
 
+## Dashboard
+
+Tableau Desktop connected live to Snowflake, querying the marts layer directly.
+
+**4 views:**
+- **Top 15 Specialties by Claims Volume** — Clinical Laboratory leads with 300M+ services
+- **Top 15 Specialties by Payment Variance** — Dental Anesthesiology has 92% gap between charges and payments
+- **Top 15 States by Medicare Spending** — CA and FL lead at $10B+
+- **What Providers Charge vs What Medicare Pays** — Side-by-side comparison showing Ambulatory Surgical Centers have the largest gap
+
+![CMS Medicare Dashboard](CMS%20Medicare%20Dashboard.png)
+
 ## Data Quality Tests
 
 8 automated tests run on every pipeline execution:
@@ -158,7 +170,7 @@ dbt_run → dbt_test → log_success
 - **dbt Core** — Data transformation and testing
 - **Apache Airflow** — Pipeline orchestration and scheduling
 - **Python** — Data loading scripts
-- **Power BI** — Dashboard visualization
+- **Tableau Desktop** — Dashboard visualization (connected live to Snowflake)
 - **Git/GitHub** — Version control
 
 ## How to Run
