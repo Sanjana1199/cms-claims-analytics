@@ -1,6 +1,6 @@
 # Healthcare Claims Analytics Platform
 
-An end-to-end ELT analytics pipeline for CMS Medicare public data using **Snowflake** and **dbt**, implementing medallion architecture with automated data quality testing.
+An end-to-end ELT analytics pipeline for CMS Medicare public data using **Snowflake**, **dbt**, and **Apache Airflow**, implementing medallion architecture with orchestrated scheduling and automated data quality testing.
 
 ## Architecture
 
@@ -41,6 +41,16 @@ Snowflake Cloud Data Warehouse
 │   │  dbt TESTS   │  8 automated quality checks       │
 │   │              │  unique, not_null validations     │
 │   └──────────────┘                                   │
+└─────────────────────────────────────────────────────┘
+        ↓
+┌─────────────────────────────────────────────────────┐
+│               Apache Airflow (Orchestration)         │
+│                                                      │
+│   DAG: cms_claims_pipeline (@daily)                  │
+│   dbt_run → dbt_test → log_success                  │
+│                                                      │
+│   Automated scheduling, dependency management,       │
+│   retry logic, and run monitoring via web UI         │
 └─────────────────────────────────────────────────────┘
         ↓
 Power BI Dashboard (provider payment variance, claims trends)
@@ -113,6 +123,20 @@ Power BI Dashboard (provider payment variance, claims trends)
 
 ![dbt Lineage Graph](lineage_graph.png)
 
+## Orchestration
+
+Pipeline is orchestrated using **Apache Airflow** with a daily-scheduled DAG:
+
+```
+dbt_run → dbt_test → log_success
+```
+
+- **Schedule:** `@daily` — runs automatically every day
+- **Dependency management:** Tests only run after models succeed
+- **Monitoring:** Web UI at `localhost:8080` for run history, logs, and alerting
+
+![Airflow DAG Graph](DAG_Graph.png)
+
 ## Data Quality Tests
 
 8 automated tests run on every pipeline execution:
@@ -132,6 +156,7 @@ Power BI Dashboard (provider payment variance, claims trends)
 
 - **Snowflake** — Cloud data warehouse (AWS)
 - **dbt Core** — Data transformation and testing
+- **Apache Airflow** — Pipeline orchestration and scheduling
 - **Python** — Data loading scripts
 - **Power BI** — Dashboard visualization
 - **Git/GitHub** — Version control
