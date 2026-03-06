@@ -3,3 +3,5 @@ logs/
 target/
 dbt_packages/
 .DS_Store
+KNOWLEDGE_GUIDE.md
+KNOWLEDGE_GUIDE_PART2.md
